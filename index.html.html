@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CosKPI — Convierte la improductividad en datos que tu empresa puede resolver</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=IBM+Plex+Mono:wght@400;500&family=Figtree:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --ink:#0c0c0b;--paper:#f7f4ee;--cream:#efe9dc;
+  --red:#c13d2a;--red-dim:#8a2b1d;--gold:#b88a2e;
+  --muted:#6b6760;--border:#ddd8ce;--card:#ffffff;
+  --mono:'IBM Plex Mono',monospace;
+  --serif:'Playfair Display',Georgia,serif;
+  --sans:'Figtree',sans-serif;
+}
+html{scroll-behavior:smooth}
+body{font-family:var(--sans);background:var(--paper);color:var(--ink);overflow-x:hidden}
+body::before{
+  content:'';position:fixed;inset:0;pointer-events:none;z-index:999;opacity:.03;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size:200px 200px;
+}
+
+/* NAV */
+nav{
+  position:fixed;top:0;left:0;right:0;z-index:100;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:1.1rem 3rem;
+  background:rgba(247,244,238,.92);backdrop-filter:blur(12px);
+  border-bottom:1px solid var(--border);
+}
+.logo{font-family:var(--mono);font-size:1.15rem;font-weight:500;color:var(--ink);text-decoration:none;letter-spacing:-.02em;display:flex;align-items:center;gap:.25rem}
+.logo-dot{color:var(--red);font-size:1.5rem;line-height:0;position:relative;top:2px}
+.nav-links{display:flex;align-items:center;gap:2.5rem}
+.nav-links a{font-size:.85rem;color:var(--muted);text-decoration:none;letter-spacing:.03em;transition:color .2s}
+.nav-links a:hover{color:var(--ink)}
+.nav-cta{font-size:.82rem;font-weight:600;background:var(--ink);color:var(--paper);padding:.55rem 1.35rem;border-radius:1px;text-decoration:none;letter-spacing:.04em;text-transform:uppercase;transition:background .2s}
+.nav-cta:hover{background:var(--red)}
+
+/* HERO */
+.hero{min-height:100vh;padding-top:64px;display:grid;grid-template-columns:1fr 480px;position:relative;overflow:hidden}
+.hero::after{content:'';position:absolute;top:0;right:460px;bottom:0;width:80px;background:var(--paper);clip-path:polygon(0 0,100% 0,40% 100%,0 100%);z-index:2}
+.hero-left{padding:7rem 3rem 5rem 3rem;display:flex;flex-direction:column;justify-content:center;position:relative;z-index:3}
+.hero-kicker{font-family:var(--mono);font-size:.72rem;font-weight:500;letter-spacing:.18em;text-transform:uppercase;color:var(--red);margin-bottom:2rem;display:flex;align-items:center;gap:.8rem}
+.hero-kicker::before{content:'';display:block;width:32px;height:1px;background:var(--red)}
+.hero-h1{font-family:var(--serif);font-size:clamp(3rem,5vw,5rem);font-weight:900;line-height:.95;letter-spacing:-.03em;margin-bottom:2rem;max-width:600px}
+.hero-h1 em{font-style:italic;color:var(--red);display:block}
+.hero-sub{font-size:1.05rem;font-weight:300;color:var(--muted);line-height:1.75;max-width:480px;margin-bottom:3rem}
+.hero-sub strong{color:var(--ink);font-weight:500}
+.hero-actions{display:flex;align-items:center;gap:1.5rem;flex-wrap:wrap}
+.btn-main{display:inline-flex;align-items:center;gap:.6rem;background:var(--red);color:#fff;padding:1rem 2.2rem;border-radius:1px;font-size:.95rem;font-weight:600;text-decoration:none;letter-spacing:.02em;transition:transform .15s,box-shadow .15s,background .2s}
+.btn-main:hover{transform:translateY(-2px);box-shadow:0 12px 32px rgba(193,61,42,.3)}
+.btn-ghost{font-size:.88rem;color:var(--muted);text-decoration:none;display:flex;align-items:center;gap:.4rem;transition:color .2s}
+.btn-ghost:hover{color:var(--ink)}
+.btn-ghost::after{content:'↓';font-size:1rem}
+.hero-badge{margin-top:2rem;display:inline-flex;align-items:center;gap:.5rem;font-family:var(--mono);font-size:.72rem;color:var(--muted)}
+.hero-badge::before{content:'✓';color:#2e7d52;font-weight:700}
+.hero-right{background:var(--ink);display:flex;flex-direction:column;justify-content:center;padding:5rem 3rem 5rem 4rem;position:relative;z-index:1;overflow:hidden}
+.hero-right::before{content:'KPI';position:absolute;right:-20px;bottom:-40px;font-family:var(--serif);font-size:14rem;font-weight:900;color:rgba(255,255,255,.03);line-height:1;pointer-events:none;user-select:none}
+.metric-stack{display:flex;flex-direction:column;gap:1px}
+.metric-item{padding:1.6rem 0;border-bottom:1px solid rgba(255,255,255,.07);opacity:0;transform:translateX(20px);animation:slideIn .5s forwards}
+.metric-item:nth-child(1){animation-delay:.15s}
+.metric-item:nth-child(2){animation-delay:.3s}
+.metric-item:nth-child(3){animation-delay:.45s}
+.metric-item:nth-child(4){animation-delay:.6s}
+.metric-item:last-child{border-bottom:none}
+@keyframes slideIn{to{opacity:1;transform:none}}
+.metric-label{font-family:var(--mono);font-size:.65rem;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.3);margin-bottom:.5rem}
+.metric-val{font-family:var(--serif);font-size:2.6rem;font-weight:700;color:#fff;line-height:1}
+.metric-val span{color:var(--red);font-style:italic}
+.metric-desc{font-size:.8rem;color:rgba(255,255,255,.4);margin-top:.4rem;line-height:1.5}
+
+/* PROBLEM */
+.problem{background:var(--cream);border-top:1px solid var(--border);border-bottom:1px solid var(--border);padding:6rem 3rem}
+.s-label{font-family:var(--mono);font-size:.68rem;letter-spacing:.15em;text-transform:uppercase;color:var(--muted);margin-bottom:1.2rem}
+.s-title{font-family:var(--serif);font-size:clamp(2rem,3.5vw,3.2rem);font-weight:700;line-height:1.1;letter-spacing:-.025em;max-width:560px;margin-bottom:3.5rem}
+.problem-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--border)}
+.problem-card{background:var(--cream);padding:2.5rem 2rem;position:relative;overflow:hidden}
+.problem-card::before{content:attr(data-num);position:absolute;top:-10px;right:16px;font-family:var(--serif);font-size:7rem;font-weight:900;color:rgba(0,0,0,.05);line-height:1;pointer-events:none}
+.problem-icon{font-size:1.5rem;margin-bottom:1rem;display:block}
+.problem-q{font-family:var(--serif);font-size:1.1rem;font-weight:700;margin-bottom:.6rem;line-height:1.3}
+.problem-a{font-size:.88rem;color:var(--muted);line-height:1.65}
+
+/* HOW */
+.how{display:grid;grid-template-columns:1fr 1fr;gap:0}
+.how-left{padding:7rem 4rem 7rem 3rem;border-right:1px solid var(--border)}
+.how-right{padding:7rem 3rem 7rem 4rem}
+.step{display:flex;gap:1.8rem;margin-bottom:2.8rem;align-items:flex-start}
+.step-n{font-family:var(--mono);font-size:.72rem;font-weight:500;color:var(--red);letter-spacing:.08em;flex-shrink:0;padding-top:.2rem}
+.step-t{font-weight:600;font-size:1rem;margin-bottom:.3rem}
+.step-d{font-size:.88rem;color:var(--muted);line-height:1.65}
+.dim-list{display:flex;flex-direction:column;gap:.6rem;margin-top:.5rem}
+.dim-row{display:flex;align-items:center;gap:1rem;padding:1.2rem 1.4rem;border:1px solid var(--border);border-radius:1px;background:var(--card);transition:border-color .2s,transform .15s;cursor:default}
+.dim-row:hover{border-color:var(--red);transform:translateX(5px)}
+.dim-pip{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.dim-info{flex:1}
+.dim-name{font-weight:600;font-size:.9rem;margin-bottom:.1rem}
+.dim-sub{font-size:.78rem;color:var(--muted)}
+.dim-tag{font-family:var(--mono);font-size:.65rem;padding:.2rem .6rem;border-radius:20px;flex-shrink:0;font-weight:500}
+.formula-box{margin-top:1.5rem;background:var(--ink);border-radius:1px;padding:1.8rem}
+.formula-label{font-family:var(--mono);font-size:.65rem;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.3);margin-bottom:1rem}
+.formula-line{font-family:var(--mono);font-size:.82rem;color:rgba(255,255,255,.6);line-height:2.2}
+.formula-line strong{color:var(--red);font-weight:500}
+
+/* RESULT */
+.result{background:var(--ink);color:#fff;padding:7rem 3rem}
+.result .s-title{color:#fff;max-width:640px}
+.result-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:rgba(255,255,255,.07);margin-top:3.5rem}
+.result-cell{padding:2.5rem 2rem;background:var(--ink);position:relative}
+.result-label{font-family:var(--mono);font-size:.65rem;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.3);margin-bottom:1rem}
+.result-num{font-family:var(--serif);font-size:2.2rem;font-weight:700;color:#fff;line-height:1.1;margin-bottom:.5rem}
+.result-num.accent{color:var(--red)}
+.result-info{font-size:.82rem;color:rgba(255,255,255,.4);line-height:1.6}
+.result-arrow{position:absolute;bottom:1.5rem;right:1.5rem;font-size:1.2rem;color:rgba(255,255,255,.1)}
+
+/* FORM */
+.form-wrap{display:grid;grid-template-columns:1fr 1fr;gap:0;border-top:1px solid var(--border)}
+.form-left{padding:7rem 4rem 7rem 3rem;border-right:1px solid var(--border)}
+.form-left .s-title{margin-bottom:1rem}
+.form-left > p{font-size:.95rem;color:var(--muted);line-height:1.75;max-width:380px}
+.checks{margin-top:2rem;display:flex;flex-direction:column;gap:.7rem}
+.check-item{display:flex;align-items:flex-start;gap:.7rem;font-size:.85rem;color:var(--muted);line-height:1.5}
+.check-item::before{content:'✓';color:#2e7d52;font-weight:700;flex-shrink:0;margin-top:.05rem}
+.form-right{padding:7rem 3rem 7rem 4rem}
+form{display:flex;flex-direction:column;gap:1.2rem}
+.field{display:flex;flex-direction:column;gap:.45rem}
+label{font-family:var(--mono);font-size:.68rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+input,select{border:1px solid var(--border);border-radius:1px;padding:.85rem 1rem;font-family:var(--sans);font-size:.95rem;color:var(--ink);background:var(--paper);outline:none;transition:border-color .2s,background .2s}
+input:focus,select:focus{border-color:var(--red);background:#fff}
+.btn-submit{background:var(--red);color:#fff;border:none;border-radius:1px;padding:1.1rem;font-family:var(--sans);font-size:.95rem;font-weight:600;letter-spacing:.04em;cursor:pointer;transition:background .2s,transform .15s;margin-top:.4rem}
+.btn-submit:hover{background:var(--red-dim);transform:translateY(-1px)}
+.form-legal{font-size:.72rem;color:var(--muted);text-align:center;line-height:1.5}
+.success{display:none;text-align:center;padding:3rem 1rem}
+.success-icon{font-size:2.5rem;margin-bottom:1rem;display:block}
+.success h3{font-family:var(--serif);font-size:1.5rem;margin-bottom:.5rem}
+.success p{font-size:.88rem;color:var(--muted)}
+
+/* PRICING */
+.pricing{padding:7rem 3rem;background:var(--cream)}
+.pricing-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--border);margin-top:3.5rem}
+.price-card{background:var(--cream);padding:2.5rem 2rem;display:flex;flex-direction:column}
+.price-card.featured{background:var(--ink);color:#fff}
+.price-tier{font-family:var(--mono);font-size:.65rem;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-bottom:1.2rem}
+.price-card.featured .price-tier{color:rgba(255,255,255,.3)}
+.price-num{font-family:var(--serif);font-size:3rem;font-weight:700;line-height:1;margin-bottom:.2rem}
+.price-card.featured .price-num{color:#fff}
+.price-period{font-size:.78rem;color:var(--muted);margin-bottom:1.2rem}
+.price-card.featured .price-period{color:rgba(255,255,255,.35)}
+.price-name{font-weight:600;font-size:1.05rem;margin-bottom:.4rem}
+.price-desc{font-size:.83rem;color:var(--muted);line-height:1.6;margin-bottom:1.8rem;flex:1}
+.price-card.featured .price-desc{color:rgba(255,255,255,.45)}
+.price-features{list-style:none;margin-bottom:2rem}
+.price-features li{font-size:.83rem;padding:.45rem 0;border-bottom:1px solid var(--border);display:flex;gap:.6rem;line-height:1.4}
+.price-card.featured .price-features li{border-color:rgba(255,255,255,.07);color:rgba(255,255,255,.65)}
+.price-features li::before{content:'—';color:var(--red);flex-shrink:0;font-weight:700}
+.price-btn{display:block;text-align:center;padding:.85rem;border:1px solid var(--border);border-radius:1px;font-size:.85rem;font-weight:600;letter-spacing:.03em;text-decoration:none;color:var(--ink);transition:background .2s,color .2s,border-color .2s}
+.price-btn:hover{background:var(--ink);color:#fff;border-color:var(--ink)}
+.price-card.featured .price-btn{background:var(--red);color:#fff;border-color:var(--red)}
+.price-card.featured .price-btn:hover{background:var(--red-dim);border-color:var(--red-dim)}
+
+/* FOOTER */
+footer{background:var(--ink);color:rgba(255,255,255,.4);padding:3rem;display:grid;grid-template-columns:1fr 1fr 1fr;align-items:center;gap:1rem;font-size:.78rem}
+.footer-logo{font-family:var(--mono);font-size:1rem;font-weight:500;color:#fff;text-decoration:none;display:flex;align-items:center;gap:.2rem}
+.footer-logo span{color:var(--red)}
+.footer-mid{text-align:center;line-height:1.6}
+.footer-right{text-align:right}
+
+/* RESPONSIVE */
+@media(max-width:900px){
+  nav{padding:1rem 1.5rem}
+  .nav-links{display:none}
+  .hero{grid-template-columns:1fr;min-height:auto}
+  .hero::after{display:none}
+  .hero-left{padding:5rem 1.5rem 3rem}
+  .hero-right{padding:3rem 1.5rem}
+  .problem,.pricing{padding:4rem 1.5rem}
+  .problem-grid,.result-grid,.pricing-grid{grid-template-columns:1fr}
+  .how{grid-template-columns:1fr}
+  .how-left{border-right:none;border-bottom:1px solid var(--border);padding:4rem 1.5rem}
+  .how-right{padding:4rem 1.5rem}
+  .form-wrap{grid-template-columns:1fr}
+  .form-left{border-right:none;border-bottom:1px solid var(--border);padding:4rem 1.5rem}
+  .form-right{padding:4rem 1.5rem}
+  .result{padding:4rem 1.5rem}
+  footer{grid-template-columns:1fr;text-align:center;gap:.5rem}
+  .footer-right{text-align:center}
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <a class="logo" href="#">Cos<span class="logo-dot">·</span>KPI</a>
+  <div class="nav-links">
+    <a href="#como-funciona">Metodología</a>
+    <a href="#diagnostico">Diagnóstico</a>
+    <a href="#precios">Paquetes</a>
+  </div>
+  <a class="nav-cta" href="#diagnostico">Descarga gratis</a>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-left">
+    <p class="hero-kicker">Consultoría de productividad · Ecuador</p>
+    <h1 class="hero-h1">
+      Tu equipo trabaja.<br>
+      <em>¿Pero a qué costo?</em>
+    </h1>
+    <p class="hero-sub">
+      La mayoría de líderes asume que la improductividad es invisible.
+      <strong>CosKPI la convierte en un número concreto</strong> — en dólares, por mes, por equipo —
+      y te muestra exactamente dónde intervenir primero.
+    </p>
+    <div class="hero-actions">
+      <a class="btn-main" href="#diagnostico">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 15V3m0 12l-4-4m4 4l4-4M2 17l.621 2.485A2 2 0 004.561 21h14.878a2 2 0 001.94-1.515L22 17"/></svg>
+        Descargar diagnóstico gratis
+      </a>
+      <a class="btn-ghost" href="#como-funciona">Ver cómo funciona</a>
+    </div>
+    <p class="hero-badge">Sin registro de tarjeta · Excel listo para usar · Resultado en 5 min</p>
+  </div>
+  <div class="hero-right">
+    <div class="metric-stack">
+      <div class="metric-item">
+        <p class="metric-label">Tiempo improductivo típico</p>
+        <p class="metric-val">23<span>%</span></p>
+        <p class="metric-desc">del tiempo laboral en equipos sin diagnóstico formal</p>
+      </div>
+      <div class="metric-item">
+        <p class="metric-label">Dimensiones del modelo CosKPI</p>
+        <p class="metric-val">3<span> ejes</span></p>
+        <p class="metric-desc">Tiempo · Roles · Procesos — con impacto en costos reales</p>
+      </div>
+      <div class="metric-item">
+        <p class="metric-label">Costo de improductividad</p>
+        <p class="metric-val">$<span>Real</span></p>
+        <p class="metric-desc">Calculado sobre los salarios reales de tu equipo, no estimaciones</p>
+      </div>
+      <div class="metric-item">
+        <p class="metric-label">Tiempo para completarlo</p>
+        <p class="metric-val">5<span> min</span></p>
+        <p class="metric-desc">15 preguntas + reporte automático en el mismo archivo Excel</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PROBLEM -->
+<section class="problem">
+  <p class="s-label">El problema que nadie mide</p>
+  <h2 class="s-title">Las preguntas que todo líder debería poder responder</h2>
+  <div class="problem-grid">
+    <div class="problem-card" data-num="01">
+      <span class="problem-icon">⏱</span>
+      <p class="problem-q">¿Cuánto cuesta realmente una reunión de 2 horas con tu equipo?</p>
+      <p class="problem-a">La mayoría lo estima. Ninguno lo ha calculado con los salarios reales del equipo. CosKPI lo hace automáticamente.</p>
+    </div>
+    <div class="problem-card" data-num="02">
+      <span class="problem-icon">🔄</span>
+      <p class="problem-q">¿Cuánto trabajo se repite por falta de procesos documentados?</p>
+      <p class="problem-a">El retrabajo invisible puede representar hasta el 15 % del costo mensual del equipo. Y nadie lo está midiendo.</p>
+    </div>
+    <div class="problem-card" data-num="03">
+      <span class="problem-icon">📋</span>
+      <p class="problem-q">¿Cada persona sabe exactamente qué se espera de ella esta semana?</p>
+      <p class="problem-a">La ambigüedad de roles es la principal fuente de tiempo perdido en organizaciones de 5 a 50 personas.</p>
+    </div>
+  </div>
+</section>
+
+<!-- HOW -->
+<section class="how" id="como-funciona">
+  <div class="how-left">
+    <p class="s-label">Metodología CosKPI</p>
+    <h2 class="s-title">Cómo convertimos tiempo perdido en datos accionables</h2>
+    <div style="margin-top:2.5rem">
+      <div class="step">
+        <span class="step-n">01 —</span>
+        <div>
+          <p class="step-t">Descarga el diagnóstico</p>
+          <p class="step-d">Un Excel diseñado para líderes. Sin instalaciones ni curva de aprendizaje. Funciona desde Excel 2016 en adelante.</p>
+        </div>
+      </div>
+      <div class="step">
+        <span class="step-n">02 —</span>
+        <div>
+          <p class="step-t">Responde las 15 preguntas</p>
+          <p class="step-d">Evalúa tu equipo en 3 dimensiones clave con escala del 1 al 5. Toma menos de 5 minutos.</p>
+        </div>
+      </div>
+      <div class="step">
+        <span class="step-n">03 —</span>
+        <div>
+          <p class="step-t">Obtén el reporte automático</p>
+          <p class="step-d">El archivo calcula el índice de productividad, semáforo por dimensión y el costo mensual de la improductividad.</p>
+        </div>
+      </div>
+      <div class="step">
+        <span class="step-n">04 —</span>
+        <div>
+          <p class="step-t">Decide si quieres ir más lejos</p>
+          <p class="step-d">El diagnóstico es tuyo para siempre. Si quieres análisis profundo y plan de acción, agendamos una sesión.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="how-right">
+    <p class="s-label">Las 3 dimensiones del modelo</p>
+    <div class="dim-list">
+      <div class="dim-row">
+        <div class="dim-pip" style="background:#7C6FE0"></div>
+        <div class="dim-info">
+          <p class="dim-name">Tiempo y horas perdidas</p>
+          <p class="dim-sub">¿Dónde se va realmente el tiempo del equipo?</p>
+        </div>
+        <span class="dim-tag" style="background:#EEEDFE;color:#3C3489">5 preguntas</span>
+      </div>
+      <div class="dim-row">
+        <div class="dim-pip" style="background:#1D9E75"></div>
+        <div class="dim-info">
+          <p class="dim-name">Carga de trabajo y roles</p>
+          <p class="dim-sub">¿Todos saben exactamente qué se espera de ellos?</p>
+        </div>
+        <span class="dim-tag" style="background:#E1F5EE;color:#085041">5 preguntas</span>
+      </div>
+      <div class="dim-row">
+        <div class="dim-pip" style="background:#BA7517"></div>
+        <div class="dim-info">
+          <p class="dim-name">Procesos y flujos de trabajo</p>
+          <p class="dim-sub">¿Los procesos facilitan o frenan al equipo?</p>
+        </div>
+        <span class="dim-tag" style="background:#FAEEDA;color:#633806">5 preguntas</span>
+      </div>
+    </div>
+    <div class="formula-box">
+      <p class="formula-label">Fórmula de costo · CosKPI</p>
+      <p class="formula-line">Costo/hora = Salario ÷ (horas × 4.3)</p>
+      <p class="formula-line">Horas improductivas = % improductividad × horas × 4.3 × personas</p>
+      <p class="formula-line"><strong>Costo mensual = Costo/hora × Horas improductivas</strong></p>
+    </div>
+  </div>
+</section>
+
+<!-- RESULT -->
+<section class="result">
+  <p class="s-label" style="color:rgba(255,255,255,.3)">Lo que obtienes</p>
+  <h2 class="s-title">Un reporte con números reales, no suposiciones</h2>
+  <div class="result-grid">
+    <div class="result-cell">
+      <p class="result-label">Índice global de productividad</p>
+      <p class="result-num">0 – 100</p>
+      <p class="result-info">Puntaje del equipo con semáforo por dimensión: rojo, amarillo o verde</p>
+      <span class="result-arrow">→</span>
+    </div>
+    <div class="result-cell">
+      <p class="result-label">Costo mensual de improductividad</p>
+      <p class="result-num accent">$ Real</p>
+      <p class="result-info">Calculado sobre los salarios reales del equipo, no estimaciones genéricas</p>
+      <span class="result-arrow">→</span>
+    </div>
+    <div class="result-cell">
+      <p class="result-label">Áreas prioritarias de acción</p>
+      <p class="result-num">Top 3</p>
+      <p class="result-info">Las dimensiones más críticas con recomendación concreta para cada una</p>
+      <span class="result-arrow">→</span>
+    </div>
+  </div>
+</section>
+
+<!-- FORM -->
+<section class="form-wrap" id="diagnostico">
+  <div class="form-left">
+    <p class="s-label">Descarga gratuita</p>
+    <h2 class="s-title">Empieza a medir hoy</h2>
+    <p>Completa el formulario y recibe el archivo Excel de diagnóstico en tu correo. Sin costo, sin compromisos.</p>
+    <div class="checks">
+      <p class="check-item">Sin costo. Sin tarjeta de crédito.</p>
+      <p class="check-item">Compatible con Excel 2016 y Google Sheets.</p>
+      <p class="check-item">Reporte automático incluido — solo llena los datos.</p>
+      <p class="check-item">No compartimos tu información con terceros.</p>
+    </div>
+  </div>
+  <div class="form-right">
+    <form id="lead-form" action="https://formspree.io/f/mgodgyvw" method="POST">
+      <div class="field">
+        <label for="name">Tu nombre</label>
+        <input type="text" id="name" name="name" placeholder="Ana García" required>
+      </div>
+      <div class="field">
+        <label for="email">Correo electrónico</label>
+        <input type="email" id="email" name="email" placeholder="ana@empresa.com" required>
+      </div>
+      <div class="field">
+        <label for="company">Empresa o equipo</label>
+        <input type="text" id="company" name="company" placeholder="Nombre de tu organización">
+      </div>
+      <div class="field">
+        <label for="size">Tamaño del equipo</label>
+        <select id="size" name="size">
+          <option value="">Selecciona...</option>
+          <option>2 – 5 personas</option>
+          <option>6 – 15 personas</option>
+          <option>16 – 50 personas</option>
+          <option>Más de 50 personas</option>
+        </select>
+      </div>
+      <button class="btn-submit" type="submit">Descargar diagnóstico gratis →</button>
+      <p class="form-legal">Al enviar aceptas recibir el archivo y contenido ocasional de CosKPI sobre productividad. Puedes darte de baja cuando quieras.</p>
+    </form>
+    <div class="success" id="success-msg">
+      <span class="success-icon">✅</span>
+      <h3>¡Ya está en camino!</h3>
+      <p>Revisa tu correo para descargar el diagnóstico CosKPI.<br><small>Si no lo ves, revisa la carpeta de spam.</small></p>
+    </div>
+  </div>
+</section>
+
+<!-- PRICING -->
+<section class="pricing" id="precios">
+  <p class="s-label">Paquetes de asesoría</p>
+  <h2 class="s-title">¿Listo para ir más lejos con tu equipo?</h2>
+  <div class="pricing-grid">
+    <div class="price-card">
+      <p class="price-tier">Nivel 01 · Gratuito</p>
+      <p class="price-num">$0</p>
+      <p class="price-period">siempre gratuito</p>
+      <p class="price-name">Diagnóstico CosKPI</p>
+      <p class="price-desc">Descarga la herramienta y aplícala de forma autónoma con tu equipo.</p>
+      <ul class="price-features">
+        <li>Excel con 15 preguntas diagnósticas</li>
+        <li>Reporte automático por dimensión</li>
+        <li>Cálculo de costo mensual incluido</li>
+        <li>Guía de interpretación de resultados</li>
+      </ul>
+      <a class="price-btn" href="#diagnostico">Descargar ahora</a>
+    </div>
+    <div class="price-card featured">
+      <p class="price-tier">Nivel 02 · Más popular</p>
+      <p class="price-num">$197</p>
+      <p class="price-period">pago único</p>
+      <p class="price-name">Diagnóstico + Sesión</p>
+      <p class="price-desc">Aplica el diagnóstico y analiza los resultados en una sesión de trabajo en vivo.</p>
+      <ul class="price-features">
+        <li>Todo lo del nivel gratuito</li>
+        <li>Sesión de 90 min vía videollamada</li>
+        <li>Análisis profundo por dimensión</li>
+        <li>Plan de acción priorizado</li>
+        <li>Grabación de la sesión incluida</li>
+      </ul>
+      <a class="price-btn" href="#diagnostico">Reservar sesión</a>
+    </div>
+    <div class="price-card">
+      <p class="price-tier">Nivel 03 · Premium</p>
+      <p class="price-num">$490</p>
+      <p class="price-period">por mes · mínimo 2 meses</p>
+      <p class="price-name">Acompañamiento</p>
+      <p class="price-desc">Seguimiento mensual para implementar mejoras y medir el avance real del equipo.</p>
+      <ul class="price-features">
+        <li>Todo lo del nivel Sesión</li>
+        <li>2 sesiones de seguimiento al mes</li>
+        <li>Diagnósticos de avance trimestrales</li>
+        <li>Acceso directo por WhatsApp</li>
+        <li>Reporte ejecutivo mensual en PDF</li>
+      </ul>
+      <a class="price-btn" href="#diagnostico">Consultar disponibilidad</a>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <a class="footer-logo" href="#">Cos<span>·</span>KPI</a>
+  <p class="footer-mid">Consultoría de productividad anclada a costos reales.<br>Ecuador · Latinoamérica</p>
+  <p class="footer-right">© 2025 CosKPI<br>coskpi.com</p>
+</footer>
+
+
+</body>
+</html>

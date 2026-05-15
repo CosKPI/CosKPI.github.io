@@ -386,7 +386,7 @@ footer{background:var(--ink);color:rgba(255,255,255,.4);padding:3rem;display:gri
     </div>
   </div>
   <div class="form-right">
-    <form id="lead-form" onsubmit="handleSubmit(event)">
+    <form id="lead-form" action="https://formspree.io/f/mgodgyvw" method="POST">
       <div class="field">
         <label for="name">Tu nombre</label>
         <input type="text" id="name" placeholder="Ana García" required>
@@ -479,13 +479,4 @@ footer{background:var(--ink);color:rgba(255,255,255,.4);padding:3rem;display:gri
   <p class="footer-right">© 2025 CosKPI<br>coskpi.com</p>
 </footer>
 
-<script>
-function handleSubmit(e){
-  e.preventDefault();
-  // Para activar: agrega action="https://formspree.io/f/XXXXXXXX" al <form>
-  document.getElementById('lead-form').style.display='none';
-  document.getElementById('success-msg').style.display='block';
-}
-</script>
-</body>
 </html>
